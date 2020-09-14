@@ -1,0 +1,247 @@
+#include <stdio.h>
+#include <string.h>
+#include <conio.h>
+
+struct kayit{
+  char isim[15];
+  char soyisim[15];
+  char tel[13];
+  int  tc[12];
+  int  bolum[30];
+};
+
+int MENU();
+int kayitEkle();
+int kayitListele();
+int kayitAra(char *);
+int kayitSil();
+int kayitGuncellestir();
+
+
+int MENU(){
+  printf("      PERSONEL KAYIT PROGRAMI       \n");
+  printf("    ---------------------------     \n");
+  printf("        1. Kayit Listeleme          \n");
+  printf("        2. Kayit Arama              \n");
+  printf("        3. Kayit Ekle               \n");
+  printf("        4. Kayit Sil                \n");
+  printf("        5. Kayit Guncellestir       \n");
+  printf("        6. Programdan Cikis         \n");
+  printf("    ---------------------------     \n");
+}
+
+
+
+int kayitListele(){
+
+  
+  FILE *menu;
+  struct kayit kayitli;
+  menu=fopen("D:\\personalKayit.txt","r");{
+    
+  
+
+  printf("\n  Tc No\t\t\t   Isim\t\t\tSoyisim\t\t\tTel No\t\t\tBolumu\n");
+  printf(" ------ \t\t--------\t\t-------\t\t\t-------\t\t\t------\n\n");
+
+  while(!feof(menu)){
+  fscanf(menu,"%s%s%s%s%s",&kayitli.isim, &kayitli.soyisim,&kayitli.tel,&kayitli.tc,&kayitli.bolum);   
+       printf("%s\t\t",kayitli.tc);
+       printf("%s\t\t\t",kayitli.isim);
+       printf("%s\t\t\t",kayitli.soyisim);
+       printf("%s\t\t",kayitli.tel);
+       printf("%s\n",kayitli.bolum);
+    
+  }}
+
+  fclose(menu);
+  return 0;
+}
+
+   kayitEkle(){
+
+  struct kayit yeniKayit;
+  FILE *menu;
+
+  menu=fopen("D:\\personalKayit.txt","a");
+    
+  
+  printf("\n\n");
+  printf("isim giriniz(max 15 karakter): ");
+  scanf("%s",yeniKayit.isim);
+
+  printf("soyisim giriniz(max 15 karakter): ");
+  scanf("%s",yeniKayit.soyisim);
+
+  printf("telefon numarasini giriniz(max 13 karakter): ");
+  scanf("%s",yeniKayit.tel);
+  
+  printf("T.C kimlik numarasi giriniz(max 12 karakter): ");
+  scanf("%s",yeniKayit.tc);
+  
+  printf("calistiginiz bölümü giriniz(max 30 karakter): ");
+  scanf("%s",yeniKayit.bolum);
+
+  fprintf(menu, "\n%s\t%s\t%s\t%s\t%s", yeniKayit.isim, yeniKayit.soyisim, yeniKayit.tel,yeniKayit.tc,yeniKayit.bolum);
+
+  fclose(menu);
+  return 0;
+}
+
+int kayitSil(){
+	
+	FILE *menu;
+	   FILE *yeni;
+	    struct kayit kayitli;
+char arama[15];
+printf("\nSilinecek personelin ismini giriniz :");
+scanf("%s", &arama);
+menu=fopen("D:\\personalKayit.txt","r");
+yeni=fopen("D:\\personalKayit1.txt","w");
+
+while(!feof(menu)){
+	fscanf(menu,"%s %s %s %s %s",&kayitli.isim, &kayitli.soyisim,&kayitli.tel,&kayitli.tc,&kayitli.bolum);
+	if(strstr(kayitli.isim,arama)){
+		fscanf(yeni,"%s %s % s%s % s",&kayitli.isim, &kayitli.soyisim,&kayitli.tel,&kayitli.tc,&kayitli.bolum);
+	}
+	fprintf(yeni,"%s %s % s%s % s",&kayitli.isim, &kayitli.soyisim,&kayitli.tel,&kayitli.tc,&kayitli.bolum);
+	printf("Kayýt silindi");
+}
+fclose(menu);
+fclose(yeni);
+remove("D:\\personalKayit.txt");
+rename("D:\\personalKayit1.txt","D:\\personalKayit.txt");
+}
+	
+
+int kayitAra(char *aranacakIsim){
+
+  
+  
+  FILE *menu;
+  struct kayit kayitli;
+  int bulunan=0;
+
+  menu=fopen("D:\\personalKayit.txt","r");
+    
+  
+
+  
+  while(!feof(menu)){
+    fscanf(menu,"%s%s%s%s%s",&kayitli.soyisim, &kayitli.tel,&kayitli.tc,&kayitli.bolum,&kayitli.isim);   
+
+    if(!strcmp(aranacakIsim, kayitli.isim)){ 
+      printf("%s\t\t",kayitli.tc);
+       printf("%s\t\t\t",kayitli.isim);
+       printf("%s\t\t",kayitli.soyisim);
+       printf("%s\t\t",kayitli.tel);
+       printf("%s\n",kayitli.bolum);
+      bulunan++;
+    }
+  }
+
+  fclose(menu);
+  return bulunan;
+}
+
+int kayitGuncellestir(){
+
+FILE *menu,*yeni;
+char aranan[15];
+
+printf("Guncellenecek Kaydin Adi? :"); 
+scanf("%s",&aranan);
+
+menu=fopen("D:\\personalKayit.txt","r");
+yeni=fopen("D:\\personalKayit1.txt","w");
+
+while(!feof(menu)){
+  struct kayit kayitli ;
+   fscanf(menu,"\n%s\t%s\t%s\t%s\t%s",kayitli.isim,kayitli.soyisim,kayitli.tel,kayitli.tc,kayitli.bolum);
+
+   if(strstr(kayitli.isim,aranan)){
+
+      printf("            Yeni Bilgiler:\n\n");
+
+      printf("Ýsim: "); scanf("%s",&kayitli.isim);
+
+      printf("Soyisim : "); scanf("%s",&kayitli.soyisim);
+
+      printf("Tel No : "); scanf("%s",&kayitli.tel);
+      
+      printf("T.C kimlik No : "); scanf("%s",&kayitli.tc);
+      
+      printf("Bolum : "); scanf("%s",&kayitli.bolum);
+
+   }
+
+fprintf(yeni,"\n%s\t%s\t%s\t%s\t%s",kayitli.isim,kayitli.soyisim,kayitli.tel,kayitli.tc,kayitli.bolum);
+
+}
+
+fclose(menu);
+fclose(yeni);
+
+remove("D:\\personalKayit.txt");
+rename("D:\\personalKayit1.txt","D:\\personalKayit.txt");
+
+return 0;
+}
+
+int main(){
+	char secim='0';
+  char aranacakIsim[16];
+  int isimAra=0;
+ 
+  
+  MENU();
+ 
+  do{
+    printf("\n\nSeciminiz ? ");
+    secim = putch(getch());
+ 
+    switch (secim){
+      case '1':
+        kayitListele();
+        break;
+      case '2':
+       printf("\naranacak ismi giriniz:");
+        scanf("%s",aranacakIsim);
+ 
+        isimAra = kayitAra(aranacakIsim);
+        if (isimAra == 0){ 
+          printf("\naranan isim kayitlarda bulunamadi.");
+        }else {
+          if(isimAra > 0)
+            printf("\ntoplam %d kayit bulundu.",isimAra);
+          else
+            printf("\nHATA: numara aranamadi!");
+        }
+        break;
+      case '3':
+        if (kayitEkle()==0){ 
+          printf("\nKayit basariyla eklendi.");
+        }else{
+          printf("\nHATA:Kayýt eklenemedi!");
+        }
+        break;
+      case '4':
+     kayitSil();
+	  break;
+	  case '5':
+	  kayitGuncellestir();
+	  	break;
+	  case '6':
+       return 0;
+        break;
+      default:
+        printf("\nlutfen 1-6 arasinda bir secim yapiniz.");
+ 
+    }
+  }
+  while(secim!=6);
+
+return 0;	
+}
+    
+      
